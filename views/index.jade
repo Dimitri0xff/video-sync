@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  div#menu-strip
+    h1#menu-title= title
+  div.container
+    div.row
+      div.col-md-4#chat-cont
+        each _ in Array(1)
+          div.chat-text
+            | text
+      div.col-md-8#video-cont
+        p Vid here
+    div.row
+      div.col-md-4.chat-input-cont
+        input.chat-input
+        div.chat-send
+          | Send
+      div.col-md-8
+    div.row
+      div.col-md-4#users-cont
+        p users
+      div.col-md-8

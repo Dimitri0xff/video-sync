@@ -1,0 +1,75 @@
+@font-face {
+    font-family:'OpenSans';
+    src: url('../fnt/OpenSans-Regular.ttf') format ('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html{
+    
+}
+
+body {
+  font-family: 'OpenSans', sans-serif;
+  font-size: 18px;
+  line-height: 1em;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#menu-strip {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 50px;
+  background-color: #29B6F6;
+}
+
+#menu-title
+{
+    line-height: 1em;
+    margin: 0 0;
+}
+
+.container {
+  padding-top: 50px;
+}
+
+#video-cont
+{
+    border: 1px solid;
+}
+
+#chat-cont
+{
+    border: 1px solid;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.chat-text {
+    padding-top:10px;
+    padding-bottom:10px;
+    margin: 0 0;
+}
+
+.chat-input-cont {
+    height: 28px;
+}
+
+.chat-input {
+    height: 28px;
+    display: inline;
+    position: absolute;
+    left: 0;
+    width: 297px;
+}
+
+.chat-send {
+    background-color: #AAAAAA;
+    display: inline;
+    position: absolute;
+    right: 0;
+    padding: 5px 25px;
+}
