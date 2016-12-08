@@ -19,6 +19,36 @@ a {
   color: #00B7FF;
 }
 
+#login-cont {
+    margin-top: 150px;
+}
+
+.login-cont {
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-line {
+    margin-bottom: 5px;
+}
+
+#login-button-cont {
+    position: relative;
+    left: 80px;
+}
+
+#login-button {
+    /* padding: 2px 20px; */
+    width: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#login-name {
+    width: 148px;
+}
+
 #menu-strip {
   padding-top: 15px;
   padding-bottom: 15px;
