@@ -1,4 +1,4 @@
-extends layout
+extends layout-login
 
 block content
   div#menu-strip
@@ -6,11 +6,14 @@ block content
   div.container
     div.row
       div.col-md-12#login-cont
-        form.login-cont(action='/room', method='post')
+        form#login-form(action='/room', method='post')
           div
             | Name:
           br
           input.login-line#login-name(type='text', name='username')
           br
           input.login-line#login-button(type='submit' value='Go')
+    div.row
+      div.col-md-12#login-error-cont
+
 

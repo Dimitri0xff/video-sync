@@ -19,8 +19,16 @@ a {
   color: #00B7FF;
 }
 
+.error-msg {
+    color: red;
+}
+
 #login-cont {
     margin-top: 150px;
+}
+
+#login-error-cont {
+    margin-top: 20px;
 }
 
 .login-cont {
@@ -79,9 +87,13 @@ a {
 }
 
 .chat-text {
-    padding-top:10px;
-    padding-bottom:10px;
+    padding-top:3px;
+    padding-bottom:3px;
     margin: 0 0;
+}
+
+.me {
+    color: blue;
 }
 
 .chat-input-cont {
@@ -102,4 +114,21 @@ a {
     position: absolute;
     right: 0;
     padding: 5px 25px;
+    user-select: none; 
+    -o-user-select: none; 
+    -moz-user-select: none; 
+    -khtml-user-select: none; 
+    -webkit-user-select: none; 
+}
+
+.chat-send:hover {
+    cursor: pointer;
+}
+
+#users-cont {
+    padding-top: 15px;
+}
+
+.users-title {
+    font-weight: bold;
 }
