@@ -2,6 +2,8 @@ var url = require('url')
   , WebSocketServer = require('ws').Server;
 
 var wss;
+var isPlaying = false;
+var currentTime = 0;
 
 var parseJson = function(msg) {
     try {
@@ -61,6 +63,13 @@ var received = function(ws, json) {
         var user = getUser(ws);
         json.name = user.name;
         sendBroadcast(json, null);
+    } else if(json.type == 'video') {
+        if(json.event == 'play') {
+            isPlaying = true;
+        } else if(json.event == 'pause') {
+            isPlaying = false;
+        }
+        sendBroadcast(json, ws);
     }
 }
 

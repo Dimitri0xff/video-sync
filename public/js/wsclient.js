@@ -1,9 +1,12 @@
 
-var SERVER_ADDRESS = 'ws://localhost:3000/';
-
+var pop;
+var media;
 var connection;
 var myName;
 var users = [];
+var isSyncing = false;
+var syncCbk = null;
+var SYNC_PROTECT_TIME = 3000;
 
 var constructDivHtml = function(clazz, text) {
     if(clazz != null && clazz != '') {
@@ -42,6 +45,30 @@ var onMessageJson = function(json) {
             clazz += ' me';
         }
         $('#chat-cont').append(constructDivHtml(clazz, json.name + ': ' + json.msg));
+        $('#chat-cont').animate({ scrollTop: 99999999999999999 }, 'fast');
+    } else if(json.type == 'video') {
+        videoRemoteEvent(json);
+    }
+}
+
+var videoRemoteEvent = function(json) {
+    if(isSyncing) {
+        clearTimeout(syncCbk);
+    }
+    isSyncing = true;
+    media.controls(false);
+    syncCbk = setTimeout(function() {
+        isSyncing = false;
+        media.controls(true);
+    }, SYNC_PROTECT_TIME);
+
+    console.log('remote: ' + json.event);
+    if(json.event == 'play') {
+        media.play();
+    } else if(json.event == 'pause') {
+        media.pause();
+    } else if(json.event == 'timeupdate') {
+        media.currentTime(json.time);
     }
 }
 
@@ -51,6 +78,8 @@ var sendJson = function(msg) {
 
 $(function () {
     
+    var SERVER_ADDRESS = location.protocol.replace('http', 'ws') + "//" + location.host + '/';
+
     // if user is running mozilla then use it's built-in WebSocket
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
@@ -96,8 +125,11 @@ $(function () {
     var sendChat = function() {
         var chatInput = $('.chat-input');
         var msg = chatInput.val();
-        chatInput.val('');
-        sendJson({type: 'chat', msg: msg});
+        msg = msg.replace(/\s+$/, '');
+        if(msg != '') {
+            chatInput.val('');
+            sendJson({type: 'chat', msg: msg});
+        }
     }
 
     $('.chat-send').click(function(){
@@ -110,4 +142,71 @@ $(function () {
             sendChat();
         }
     });
+
+    var resizeVideo = function() {
+        var vidContWidth = $('#video-cont').width();
+        // Set video width
+        $('.video-entry').width(vidContWidth);
+        $('.video-entry').resize(function() {
+            var entryHeight = $('.video-entry').height();
+            $('#video-cont').height(entryHeight);
+            $('#chat-cont').height(entryHeight);
+        });
+    }
+
+    $(window).ready(function() {
+        resizeVideo();
+    });
+
+    $(window).resize(function() {
+        resizeVideo();
+    });
+
+    var createPopcorn = function() {
+        pop = Popcorn("#main-video"/*, {
+           defaults: {
+             subtitle: {
+               target: "#video-cont"
+             }
+            }
+        }*/
+        );
+
+        media = Popcorn("#main-video");
+        var events = "play pause timeupdate seeking".split(/\s+/g);
+        
+        events.forEach(function(event) {
+            media.on(event, function() {
+
+                // Don't send an event if acting on a remote event
+                if(isSyncing) {
+                    return;
+                }
+
+                if (event === "timeupdate") {
+                    console.log(this.currentTime());
+                    if (!this.media.paused) {
+                        return;
+                    }
+
+                    //console.log('time: '+this.currentTime());
+                    sendJson({type: 'video', event: event, time: this.currentTime()});
+                    return;
+                }
+
+                if (event === "seeking") {
+                    // Not needed
+                }
+
+                if (event === "play" || event === "pause") {
+                    //console.log(event);
+                    sendJson({type: 'video', event: event});
+                }
+            });
+        });
+    
+    }
+
+    createPopcorn();
+
 });
